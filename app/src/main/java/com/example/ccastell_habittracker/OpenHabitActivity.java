@@ -1,10 +1,8 @@
 package com.example.ccastell_habittracker;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,16 +18,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class OpenHabitActivity extends AppCompatActivity {
 
-    private String titleText;
-    private String bodyText;
     private Habit habit;
     private int index;
+    private HabitView habitView;
+    private TextView titleView;
+    private TextView textView;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
     private static final String FILENAME = "file.sav";
@@ -49,6 +47,13 @@ public class OpenHabitActivity extends AppCompatActivity {
         this.index = getIntent().getIntExtra("Position", 0);
         this.habit = this.habitList.getHabit(this.index);
 
+        this.habitView = new HabitView(this.habit);
+
+        this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
+        this.titleView.setText(habitView.titleStingView());
+
+        this.textView = (TextView) findViewById(R.id.OpenHabit_description);
+        this.textView.setText(habitView.titleStingView());
     }
 
     @Override

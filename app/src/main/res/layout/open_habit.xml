@@ -46,7 +46,10 @@
         android:layout_below="@+id/OpenHabit_mark_complete_button"
         android:layout_marginTop="15dp"
         android:layout_above="@+id/OpenHabit_bottom_frame"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="15dp"
+        android:padding="15dp"
+        android:textSize="25dp"
+        android:singleLine="false" />
 
     <Button
         android:layout_width="wrap_content"

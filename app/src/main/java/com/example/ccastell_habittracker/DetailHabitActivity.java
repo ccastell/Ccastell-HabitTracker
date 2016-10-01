@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 
 public class DetailHabitActivity extends AppCompatActivity {
     private Habit habit;
+    private HabitView habitView;
+    private TextView titleView;
     private ArrayAdapter<String> adapter;
     private ArrayList<Habit> jsonList;
     private ArrayList<String> occurrences = new ArrayList<String>();
@@ -136,19 +139,25 @@ public class DetailHabitActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadFromFile();
+
         this.habitList = new HabitList(this.jsonList);
         int index = getIntent().getIntExtra("Position", 0);
         this.habit = this.habitList.getHabit(index);
         toogleCheckbox();
         this.occurrences = this.habit.getOccurrences();
 
-        //System.out.println(this.habit.getOccurrences().size());
-        //System.out.println(this.occurrences.size());
+        this.habitView = new HabitView(this.habit);
 
+        this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
+        this.titleView.setText(habitView.titleStingView());
 
-        this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, this.occurrences);
+        ArrayList<String> dates = habitView.datesStringView();
+        this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, dates);
         ListView listView = (ListView) findViewById(R.id.DetailsPage_list);
         listView.setAdapter(this.adapter);
+
+        //System.out.println(this.habit.getOccurrences().size());
+        //System.out.println(this.occurrences.size());
     }
 
     @Override
