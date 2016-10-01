@@ -26,7 +26,4 @@ public class HabitList {
     public void removeHabit(Habit habit){
         this.habitList.remove(habit);
     }
-
-
-
 }

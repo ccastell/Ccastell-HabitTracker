@@ -1,6 +1,7 @@
 package com.example.ccastell_habittracker;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ public class OpenHabitActivity extends AppCompatActivity {
     private String titleText;
     private String bodyText;
     private Habit habit;
+    private int index;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
     private static final String FILENAME = "file.sav";
@@ -36,6 +39,21 @@ public class OpenHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_habit);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadFromFile();
+        this.habitList = new HabitList(jsonList);
+        this.index = getIntent().getIntExtra("Position", 0);
+        this.habit = this.habitList.getHabit(this.index);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         Button doneButton = (Button) findViewById(R.id.OpenHabit_done_button);
         doneButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -46,7 +64,6 @@ public class OpenHabitActivity extends AppCompatActivity {
                     }
                 }
         );
-
         Button deleteButton = (Button) findViewById(R.id.OpenHabit_delete_button);
         deleteButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -57,7 +74,6 @@ public class OpenHabitActivity extends AppCompatActivity {
                     }
                 }
         );
-
         Button completeButton = (Button) findViewById(R.id.OpenHabit_mark_complete_button);
         completeButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -67,16 +83,22 @@ public class OpenHabitActivity extends AppCompatActivity {
                     }
                 }
         );
+        Button moreButton = (Button) findViewById(R.id.OpenHabit_more_button);
+        moreButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+                        Intent intent= new Intent(OpenHabitActivity.this, DetailHabitActivity.class);
+                        //putParcelable
 
-    }
+                        intent.putExtra("Position", index);
+                        startActivityForResult(intent,0);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadFromFile();
-        this.habitList = new HabitList(jsonList);
-        int index = getIntent().getIntExtra("Position", 0);
-        this.habit = this.habitList.getHabit(index);
+                        //finish();
+                        //habit.addHistory();
+                        //saveInFile();
+                    }
+                }
+        );
     }
 
     //This will save the data into a file

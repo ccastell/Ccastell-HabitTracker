@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayAdapter<Habit> adapter;
-    private ListView listView;
+    public ArrayAdapter<Habit> adapter;
+    //private ListView listView;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
     private static final String FILENAME = "file.sav";
@@ -53,25 +53,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        adapter.notifyDataSetChanged();
+        this.adapter.notifyDataSetChanged();
+        changeAdapter();
+
     }
     //
     @Override
     protected void onStart() {
         super.onStart();
         loadFromFile();
-        this.habitList = new HabitList(jsonList);
+        changeAdapter();
 
-        adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
-        listView = (ListView) findViewById(R.id.Main_habit_list);
-        listView.setAdapter(adapter);
 
+    }
+
+    private void changeAdapter() {
+        this.habitList = new HabitList(this.jsonList);
+        this.adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
+        ListView listView = (ListView) findViewById(R.id.Main_habit_list);
+        listView.setAdapter(this.adapter);
     }
 
     private void loadFromFile() {

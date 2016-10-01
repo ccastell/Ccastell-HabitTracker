@@ -1,5 +1,6 @@
 package com.example.ccastell_habittracker;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Date;
 /**
  * Created by carlcastello on 29/09/16.
  */
-public class Habit {
+public class Habit implements Serializable{
     private int count;
     private String title;
     private String text;
@@ -39,9 +40,18 @@ public class Habit {
         this.count ++;
     }
 
+    public ArrayList<Date> getHistory() {
+        return this.history;
+    }
+
     public void addOccurrences(ArrayList<String> occurrences) {
         this.occurrences = occurrences;
     }
+
+    public ArrayList<String> getOccurrences() {
+        return this.occurrences;
+    }
+
 
     @Override
     public String toString() {

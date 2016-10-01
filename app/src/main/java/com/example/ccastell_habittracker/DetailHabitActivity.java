@@ -3,9 +3,10 @@ package com.example.ccastell_habittracker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,70 +21,30 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class AddHabitActivity extends AppCompatActivity {
-    private Habit newHabit;
-    private EditText titleText;
-    private EditText bodyText;
-    private ArrayList<String> occurrences = new ArrayList<String>();;
+public class DetailHabitActivity extends AppCompatActivity {
+    private Habit habit;
+    private ArrayAdapter<String> adapter;
     private ArrayList<Habit> jsonList;
+    private ArrayList<String> occurrences = new ArrayList<String>();
     private HabitList habitList;
+
     private static final String FILENAME = "file.sav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_habit);
-        //habitList = new HabitList();
+        setContentView(R.layout.detail_habit);
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadFromFile();
-        //this.habitList = this.jsonList;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.habitList = new HabitList(this.jsonList);
-        this.titleText = (EditText) findViewById(R.id.AddPage_title);
-        this.bodyText = (EditText) findViewById(R.id.AddPage_description);
-        //this.occurrences = new ArrayList<String>();
-
-        Button doneButton = (Button) findViewById(R.id.AddPage_done_button);
-        doneButton.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-
-                        String title = titleText.getText().toString();
-                        String body = bodyText.getText().toString();
-
-                        newHabit = new Habit(title,body);
-                        newHabit.addHistory();
-                        newHabit.addOccurrences(occurrences);
-
-                        habitList.addHabit(newHabit);
-
-                        saveInFile();
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                }
-        );
-    }
-
-    //Check Box onClick
-    //https://developer.android.com/reference/android/widget/CheckBox.html
-    public void AddPage_onCheckboxClicked(View view) {
+    // Read checkbox state for record keeping
+    public void DetailsPage_onCheckboxClicked(View view) {
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
         String day;
         switch(view.getId()) {
-            case R.id.AddPage_sunday:
+            case R.id.DetailsPage_sunday:
                 day = "Sunday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -95,7 +56,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_monday:
+            case R.id.DetailsPage_monday:
                 day = "Monday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -107,7 +68,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_tuesday:
+            case R.id.DetailsPage_tuesday:
                 day = "Tuesday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -119,7 +80,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_wednesday:
+            case R.id.DetailsPage_wednesday:
                 day = "Wednesday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -131,7 +92,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_thursday:
+            case R.id.DetailsPage_thursday:
                 day = "Thursday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -143,7 +104,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_friday:
+            case R.id.DetailsPage_friday:
                 day = "Friday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -155,7 +116,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.AddPage_saturday:
+            case R.id.DetailsPage_saturday:
                 day = "Saturday";
                 if (checked) {
                     this.occurrences.add(day);
@@ -170,6 +131,82 @@ public class AddHabitActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadFromFile();
+        this.habitList = new HabitList(this.jsonList);
+        int index = getIntent().getIntExtra("Position", 0);
+        this.habit = this.habitList.getHabit(index);
+        toogleCheckbox();
+        this.occurrences = this.habit.getOccurrences();
+
+        //System.out.println(this.habit.getOccurrences().size());
+        //System.out.println(this.occurrences.size());
+
+
+        this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, this.occurrences);
+        ListView listView = (ListView) findViewById(R.id.DetailsPage_list);
+        listView.setAdapter(this.adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Button doneButton2 = (Button) findViewById(R.id.DetailsPage_done_button);
+        doneButton2.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+                        habit.addOccurrences(occurrences);
+                        saveInFile();
+                        finish();
+
+                    }
+                }
+        );
+    }
+
+    // Changing checkBox state based on the saved checkbox.
+    private void toogleCheckbox() {
+        ArrayList<String> days = this.habit.getOccurrences();
+        int range = days.size();
+        for (int i=0; i<range;i++) {
+            String day = days.get(i);
+            CheckBox checkBox1;
+            switch (day) {
+                case "Monday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_monday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Tuesday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_tuesday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Wednesday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_wednesday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Thursday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_thursday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Friday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_friday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Saturday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_saturday);
+                    checkBox1.setChecked(true);
+                    break;
+                case "Sunday":
+                    checkBox1 = (CheckBox) findViewById(R.id.DetailsPage_sunday);
+                    checkBox1.setChecked(true);
+                    break;
+            }
+        }
+    }
 
     //This will save the data into a file
     private void saveInFile() {
@@ -202,11 +239,14 @@ public class AddHabitActivity extends AppCompatActivity {
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
             this.jsonList = gson.fromJson(in,listType);
-            this.habitList = new HabitList(jsonList);
+            //this.habitList = new HabitList(jsonList);
 
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file. */
             this.habitList = new HabitList();
         }
     }
+
+
+
 }

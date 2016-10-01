@@ -75,8 +75,8 @@
 
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:text="History"
-            android:id="@+id/OpenHabit_history_button"
+            android:text="Details"
+            android:id="@+id/OpenHabit_more_button"
             android:layout_weight="0.5"
             android:background="#3241a0"
             android:textColor="#ffffff"
