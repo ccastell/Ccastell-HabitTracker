@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,14 +19,22 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    public ArrayAdapter<Habit> adapter;
+    public SimpleAdapter adapter;
     //private ListView listView;
     private ArrayList<Habit> jsonList;
+    private Habit habit;
+    private HabitView habitView;
     private HabitList habitList;
+
     private static final String FILENAME = "file.sav";
+    //private String[] titleList, dateLits;
+    private List<Map<String,String>> Data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +81,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeAdapter() {
-        this.habitList = new HabitList(this.jsonList);
-        this.adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
         ListView listView = (ListView) findViewById(R.id.Main_habit_list);
+
+        this.habitList = new HabitList(this.jsonList);
+        int range = habitList.countHabit();
+        this.Data = new  ArrayList<Map<String,String>>();
+        for (int i=0; i<range; i++) {
+            this.habit = this.habitList.getHabit(i);
+            this.habitView = new HabitView(this.habit);
+            Map<String,String> datum = new HashMap<String,String>(2);
+            datum.put("title",this.habitView.titleStringView());
+            datum.put("date",this.habitView.dateStringView());
+            this.Data.add(datum);
+        }
+
+        this.adapter = new SimpleAdapter(
+                this,
+                this.Data,
+                android.R.layout.simple_list_item_2,
+                new String[] {"title","date"},
+                new int[] {android.R.id.text1,android.R.id.text2}
+        );
+        //this.adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
         listView.setAdapter(this.adapter);
     }
 

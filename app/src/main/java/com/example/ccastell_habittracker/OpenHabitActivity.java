@@ -28,6 +28,7 @@ public class OpenHabitActivity extends AppCompatActivity {
     private HabitView habitView;
     private TextView titleView;
     private TextView textView;
+    private TextView countView;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
     private static final String FILENAME = "file.sav";
@@ -50,10 +51,14 @@ public class OpenHabitActivity extends AppCompatActivity {
         this.habitView = new HabitView(this.habit);
 
         this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
-        this.titleView.setText(habitView.titleStingView());
+        this.titleView.setText(habitView.titleStringView());
 
         this.textView = (TextView) findViewById(R.id.OpenHabit_description);
-        this.textView.setText(habitView.titleStingView());
+        this.textView.setText(habitView.textStringView());
+
+        this.countView = (TextView) findViewById(R.id.OpenHabit_Counter);
+        this.countView.setText(habitView.countStringView());
+
     }
 
     @Override
@@ -84,6 +89,9 @@ public class OpenHabitActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         habit.addHistory();
+                        habit.addHistoryCount();
+                        countView = (TextView) findViewById(R.id.OpenHabit_Counter);
+                        countView.setText(habitView.countStringView());
                         saveInFile();
                     }
                 }

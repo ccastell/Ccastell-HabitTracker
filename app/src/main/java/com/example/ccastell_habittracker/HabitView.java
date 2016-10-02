@@ -19,12 +19,21 @@ public class HabitView {
         this.habit = habit;
     }
 
-    public String titleStingView() {
+    public String titleStringView() {
         return this.habit.getTitle();
     }
 
-    public String textStingView() {
+    public String textStringView() {
         return this.habit.getText();
+    }
+
+    public String countStringView() {
+        return String.valueOf(this.habit.getHistoryCount());
+    }
+
+    public String dateStringView() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM-d-yyyy, HH:mm");
+        return formatter.format(habit.getDateCreation());
     }
 
     public ArrayList<String> datesStringView() {

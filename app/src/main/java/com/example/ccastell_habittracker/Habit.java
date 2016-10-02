@@ -37,11 +37,27 @@ public class Habit implements Serializable{
     public void addHistory() {
         Date date = new Date();
         this.history.add(date);
+    }
+
+    public void addHistoryCount() {
         this.count ++;
+    }
+
+    public int getHistoryCount() {
+        return this.count;
     }
 
     public ArrayList<Date> getHistory() {
         return this.history;
+    }
+
+    public void  removeHistory(int index) {
+        this.history.remove(index);
+        this.count --;
+    }
+
+    public Date getDateCreation() {
+        return this.history.get(0);
     }
 
     public void addOccurrences(ArrayList<String> occurrences) {

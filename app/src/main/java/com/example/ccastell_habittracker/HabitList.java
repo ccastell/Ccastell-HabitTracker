@@ -26,4 +26,10 @@ public class HabitList {
     public void removeHabit(Habit habit){
         this.habitList.remove(habit);
     }
+    public void replaceHabit(Habit habit, int index) {
+        this.habitList.set(index,habit);
+    }
+    public int countHabit() {
+        return this.habitList.size();
+    }
 }

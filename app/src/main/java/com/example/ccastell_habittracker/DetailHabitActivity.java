@@ -1,8 +1,10 @@
 package com.example.ccastell_habittracker;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,6 +30,7 @@ public class DetailHabitActivity extends AppCompatActivity {
     private HabitView habitView;
     private TextView titleView;
     private ArrayAdapter<String> adapter;
+    private int index;
     private ArrayList<Habit> jsonList;
     private ArrayList<String> occurrences = new ArrayList<String>();
     private HabitList habitList;
@@ -141,24 +144,23 @@ public class DetailHabitActivity extends AppCompatActivity {
         loadFromFile();
 
         this.habitList = new HabitList(this.jsonList);
-        int index = getIntent().getIntExtra("Position", 0);
-        this.habit = this.habitList.getHabit(index);
+        this.index = getIntent().getIntExtra("Position", 0);
+        this.habit = this.habitList.getHabit(this.index);
         toogleCheckbox();
         this.occurrences = this.habit.getOccurrences();
 
         this.habitView = new HabitView(this.habit);
 
         this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
-        this.titleView.setText(habitView.titleStingView());
+        this.titleView.setText(habitView.titleStringView());
 
-        ArrayList<String> dates = habitView.datesStringView();
-        this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, dates);
-        ListView listView = (ListView) findViewById(R.id.DetailsPage_list);
-        listView.setAdapter(this.adapter);
+        changeAdapter();
 
         //System.out.println(this.habit.getOccurrences().size());
         //System.out.println(this.occurrences.size());
     }
+
+
 
     @Override
     protected void onResume() {
@@ -172,6 +174,23 @@ public class DetailHabitActivity extends AppCompatActivity {
                         saveInFile();
                         finish();
 
+                    }
+                }
+        );
+
+        final ListView habitListView = (ListView) findViewById(R.id.DetailsPage_list);
+        habitListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (habit.getHistoryCount() > 0) {
+                            habit.removeHistory(position);
+                            System.out.print(habit.getHistory().size());
+                            habitView = new HabitView(habit);
+                            habitList.replaceHabit(habit, index);
+
+                            changeAdapter();
+                            saveInFile();
+                        }
                     }
                 }
         );
@@ -215,6 +234,14 @@ public class DetailHabitActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    private void changeAdapter() {
+        ArrayList<String> dates = habitView.datesStringView();
+
+        this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, dates);
+        ListView listView = (ListView) findViewById(R.id.DetailsPage_list);
+        listView.setAdapter(this.adapter);
     }
 
     //This will save the data into a file
