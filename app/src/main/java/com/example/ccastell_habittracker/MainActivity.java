@@ -1,17 +1,23 @@
 package com.example.ccastell_habittracker;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import java.text.SimpleDateFormat;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -19,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     //private ListView listView;
     private ArrayList<Habit> jsonList;
     private Habit habit;
+    private int range;
+    private Date currentDate;
     private HabitView habitView;
     private HabitList habitList;
 
@@ -41,11 +51,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.currentDate = new Date();
+    }
+
+    //
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadFromFile();
+        changeAdapter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         Button addButton = (Button) findViewById(R.id.Main_add_button);
         addButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         Intent intent= new Intent(MainActivity.this, AddHabitActivity.class);
+                        System.out.println("***** "+currentDate);
+                        intent.putExtra("Date",currentDate.getTime());
                         startActivityForResult(intent,0);
                     }
                 }
@@ -57,12 +84,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(MainActivity.this, OpenHabitActivity.class);
                         /*http://stackoverflow.com/questions/7074097/how-to-pass-integer-from-one-activity-to-another*/
+                        intent.putExtra("Date",currentDate.getTime());
                         intent.putExtra("Position", position);
                         startActivityForResult(intent,0);
                     }
                 }
         );
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -70,21 +99,12 @@ public class MainActivity extends AppCompatActivity {
         changeAdapter();
 
     }
-    //
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadFromFile();
-        changeAdapter();
-
-
-    }
 
     private void changeAdapter() {
         ListView listView = (ListView) findViewById(R.id.Main_habit_list);
 
         this.habitList = new HabitList(this.jsonList);
-        int range = habitList.countHabit();
+        this.range = habitList.countHabit();
         this.Data = new  ArrayList<Map<String,String>>();
         for (int i=0; i<range; i++) {
             this.habit = this.habitList.getHabit(i);
@@ -99,9 +119,36 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 this.Data,
                 android.R.layout.simple_list_item_2,
-                new String[] {"title","date"},
+                new String[] {"title","date","occurrences"},
                 new int[] {android.R.id.text1,android.R.id.text2}
-        );
+        ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View row = super.getView(position, convertView, parent);
+                TextView text = (TextView) row.findViewById(android.R.id.text1);
+
+                SimpleDateFormat daysFormat = new SimpleDateFormat("EEEE");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                String day = daysFormat.format(currentDate);
+                String date = dateFormat.format(currentDate);
+                System.out.println("---"+date);
+                habit = habitList.getHabit(position);
+                if (habit.getOccurrences().contains(day)){
+                    if (habit.getHistory().contains(date) && habit.getHistoryCount() == 0) {
+                        text.setTextColor(Color.RED);
+                    }
+                    if (!habit.getHistory().contains(date)) {
+                        text.setTextColor(Color.RED);
+                    }
+                }
+                else {
+                    text.setTextColor(Color.BLACK);
+                }
+
+                return  row;
+            }
+        };
+
         //this.adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
         listView.setAdapter(this.adapter);
     }

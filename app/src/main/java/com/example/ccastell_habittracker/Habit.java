@@ -13,7 +13,7 @@ public class Habit implements Serializable{
     private int count;
     private String title;
     private String text;
-    private ArrayList<Date> history;
+    private ArrayList<String> history;
     private ArrayList<String> occurrences;
 
     public Habit(String title, String text){
@@ -21,7 +21,7 @@ public class Habit implements Serializable{
         this.count = 0;
         this.title = title;
         this.text = text;
-        this.history = new ArrayList<Date>();
+        this.history = new ArrayList<String>();
         this.occurrences = new ArrayList<String>();
     }
 
@@ -34,9 +34,11 @@ public class Habit implements Serializable{
         return this.text;
     }
 
-    public void addHistory() {
-        Date date = new Date();
-        this.history.add(date);
+    public void addHistory(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        String dateFormatted = dateFormat.format(date);
+        System.out.println(dateFormatted);
+        this.history.add(dateFormatted);
     }
 
     public void addHistoryCount() {
@@ -47,7 +49,7 @@ public class Habit implements Serializable{
         return this.count;
     }
 
-    public ArrayList<Date> getHistory() {
+    public ArrayList<String> getHistory() {
         return this.history;
     }
 
@@ -56,7 +58,7 @@ public class Habit implements Serializable{
         this.count --;
     }
 
-    public Date getDateCreation() {
+    public String getDateCreation() {
         return this.history.get(0);
     }
 
@@ -66,14 +68,6 @@ public class Habit implements Serializable{
 
     public ArrayList<String> getOccurrences() {
         return this.occurrences;
-    }
-
-
-    @Override
-    public String toString() {
-        String habitTitle = this.getTitle();
-        //String creationDate = this.getCreationDate();
-        return habitTitle;
     }
 
 }

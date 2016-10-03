@@ -32,25 +32,11 @@ public class HabitView {
     }
 
     public String dateStringView() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM-d-yyyy, HH:mm");
-        return formatter.format(habit.getDateCreation());
+        return habit.getDateCreation();
     }
 
     public ArrayList<String> datesStringView() {
-        //String date;
-        //SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM DD hh:mm:ss yyyy");
-        SimpleDateFormat formatter = new SimpleDateFormat("E, MMM-d-yyyy, HH:mm");
-
-        ArrayList<String> dates = new ArrayList<String>();
-        ArrayList<Date> habitDates = this.habit.getHistory();
-        int range = habitDates.size();
-        for (int i = 0; i < range; i++) {
-            String date = formatter.format(habitDates.get(i));
-            dates.add(date);
-
-        }
-
-        return dates;
+        return this.habit.getHistory();
     }
 }
 

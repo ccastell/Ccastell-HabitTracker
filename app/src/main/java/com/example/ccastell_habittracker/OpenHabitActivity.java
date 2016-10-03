@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OpenHabitActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class OpenHabitActivity extends AppCompatActivity {
     private HabitView habitView;
     private TextView titleView;
     private TextView textView;
+    private Date currentDate;
     private TextView countView;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
@@ -45,6 +47,7 @@ public class OpenHabitActivity extends AppCompatActivity {
         super.onStart();
         loadFromFile();
         this.habitList = new HabitList(jsonList);
+        this.currentDate = new Date(getIntent().getLongExtra("Date",-1));
         this.index = getIntent().getIntExtra("Position", 0);
         this.habit = this.habitList.getHabit(this.index);
 
@@ -88,7 +91,7 @@ public class OpenHabitActivity extends AppCompatActivity {
         completeButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        habit.addHistory();
+                        habit.addHistory(currentDate);
                         habit.addHistoryCount();
                         countView = (TextView) findViewById(R.id.OpenHabit_Counter);
                         countView.setText(habitView.countStringView());

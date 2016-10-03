@@ -29,22 +29,26 @@ public class AddHabitActivity extends AppCompatActivity {
     private ArrayList<String> occurrences = new ArrayList<String>();;
     private ArrayList<Habit> jsonList;
     private HabitList habitList;
+    private Date currentDate;
     private static final String FILENAME = "file.sav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_habit);
-        //habitList = new HabitList();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         loadFromFile();
-        //this.habitList = this.jsonList;
+       // String date = getIntent().getExtras().getString("date");
+
+        this.currentDate = new Date(getIntent().getLongExtra("Date",-1));
+        System.out.println("+++++ "+currentDate);
     }
+
+
 
     @Override
     protected void onResume() {
@@ -63,7 +67,7 @@ public class AddHabitActivity extends AppCompatActivity {
                         String body = bodyText.getText().toString();
 
                         newHabit = new Habit(title,body);
-                        newHabit.addHistory();
+                        newHabit.addHistory(currentDate);
                         newHabit.addOccurrences(occurrences);
 
                         habitList.addHabit(newHabit);
