@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Calendar today = Calendar.getInstance();
-        //today.set(Calendar.HOUR_OF_DAY,0);
         this.currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String dateFormatted = dateFormat.format(currentDate);
@@ -102,10 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeAdapter() {
         ListView listView = (ListView) findViewById(R.id.Main_habit_list);
-
-        //this.habitListController = new HabitListController(this.jsonList);
-        //this.habitListController.makeHabitList(this.jsonList);
-
 
         this.range = this.habitListController.getHabitListCount();
         this.Data = new  ArrayList<Map<String,String>>();

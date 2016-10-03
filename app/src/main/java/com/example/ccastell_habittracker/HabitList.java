@@ -16,19 +16,22 @@ public class HabitList {
         this.habitList = habitList;
     }
 
-    public ArrayList<Habit> accessHabitList(){
-        return this.habitList;
+    public Habit accessHabit(int index) {
+        return this.habitList.get(index);
     }
 
     public void incrementHabit(Habit habit) {
         this.habitList.add(habit);
     }
-    public Habit accessHabit(int index) {
-        return this.habitList.get(index);
-    }
+
     public void decrementHabit(Habit habit){
         this.habitList.remove(habit);
     }
+
+    public ArrayList<Habit> accessHabitList(){
+        return this.habitList;
+    }
+
     public void modifyHabitList(Habit habit, int index) {
         this.habitList.set(index,habit);
     }

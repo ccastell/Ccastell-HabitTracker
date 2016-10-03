@@ -51,10 +51,6 @@ public class AddHabitActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //System.out.println("----- "+this.jsonList.size());
-        //this.habitListController = new HabitListController(this.jsonList);
-        //this.habitListController.makeHabitList(this.jsonList);
-
 
         this.titleText = (EditText) findViewById(R.id.AddPage_title);
         this.bodyText = (EditText) findViewById(R.id.AddPage_description);

@@ -25,7 +25,6 @@ public class Habit implements Serializable{
         this.occurrences = new ArrayList<String>();
     }
 
-
     public String accessTitle() {
         return this.title;
     }
