@@ -24,15 +24,17 @@ import java.util.Date;
 
 public class OpenHabitActivity extends AppCompatActivity {
 
-    private Habit habit;
+    //private Habit habit;
     private int index;
-    private HabitView habitView;
+    //private HabitView habitView;
     private TextView titleView;
     private TextView textView;
     private Date currentDate;
     private TextView countView;
     private ArrayList<Habit> jsonList;
-    private HabitList habitList;
+    //private HabitList habitList;
+    private HabitListController habitListController;
+    private HabitController habitController;
     private static final String FILENAME = "file.sav";
 
     @Override
@@ -46,21 +48,27 @@ public class OpenHabitActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadFromFile();
-        this.habitList = new HabitList(jsonList);
+
+        this.habitListController = new HabitListController(this.jsonList);
+        //this.habitListController.makeHabitList(this.jsonList);
+
         this.currentDate = new Date(getIntent().getLongExtra("Date",-1));
         this.index = getIntent().getIntExtra("Position", 0);
-        this.habit = this.habitList.getHabit(this.index);
 
-        this.habitView = new HabitView(this.habit);
+        Habit habit = this.habitListController.getHabit(this.index);
+        System.out.println("Open Habit "+habit.accessTitle());
+        System.out.println("Open Habit "+habit.accessHistoryCount());
+        System.out.println("Open Habit "+habit.accessText());
+        this.habitController = new HabitController(habit);
 
         this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
-        this.titleView.setText(habitView.titleStringView());
+        this.titleView.setText(this.habitController.getTitle());
 
         this.textView = (TextView) findViewById(R.id.OpenHabit_description);
-        this.textView.setText(habitView.textStringView());
+        this.textView.setText(this.habitController.getText());
 
         this.countView = (TextView) findViewById(R.id.OpenHabit_Counter);
-        this.countView.setText(habitView.countStringView());
+        this.countView.setText(this.habitController.getHistoryCount());
 
     }
 
@@ -81,7 +89,8 @@ public class OpenHabitActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        habitList.removeHabit(habit);
+                        Habit habit = habitController.getThis();
+                        habitListController.removeHabit(habit);
                         saveInFile();
                         finish();
                     }
@@ -91,10 +100,10 @@ public class OpenHabitActivity extends AppCompatActivity {
         completeButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        habit.addHistory(currentDate);
-                        habit.addHistoryCount();
+                        habitController.addHistory(currentDate);
+                        habitController.addHistoryCount();
                         countView = (TextView) findViewById(R.id.OpenHabit_Counter);
-                        countView.setText(habitView.countStringView());
+                        countView.setText(habitController.getHistoryCount());
                         saveInFile();
                     }
                 }
@@ -124,7 +133,7 @@ public class OpenHabitActivity extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(habitList.getHabitList(), out);
+            gson.toJson(this.habitListController.getHabitList(), out);
             out.flush();
 
             fos.close();
@@ -151,7 +160,7 @@ public class OpenHabitActivity extends AppCompatActivity {
 
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file. */
-            this.habitList = new HabitList();
+            this.habitListController = new HabitListController();
         }
     }
 }

@@ -26,14 +26,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class DetailHabitActivity extends AppCompatActivity {
-    private Habit habit;
-    private HabitView habitView;
+
     private TextView titleView;
     private ArrayAdapter<String> adapter;
     private int index;
     private ArrayList<Habit> jsonList;
     private ArrayList<String> occurrences = new ArrayList<String>();
-    private HabitList habitList;
+
+    private HabitListController habitListController;
+    private HabitController habitController;
 
     private static final String FILENAME = "file.sav";
 
@@ -143,24 +144,22 @@ public class DetailHabitActivity extends AppCompatActivity {
         super.onStart();
         loadFromFile();
 
-        this.habitList = new HabitList(this.jsonList);
-        this.index = getIntent().getIntExtra("Position", 0);
-        this.habit = this.habitList.getHabit(this.index);
-        toogleCheckbox();
-        this.occurrences = this.habit.getOccurrences();
+        this.habitListController = new HabitListController(this.jsonList);
+        //this.habitListController.makeHabitList(this.jsonList);
 
-        this.habitView = new HabitView(this.habit);
+        this.index = getIntent().getIntExtra("Position", 0);
+
+        Habit habit = this.habitListController.getHabit(this.index);
+        this.habitController = new HabitController(habit);
+
+        toogleCheckbox();
+
+        this.occurrences = this.habitController.getOccurrences();
 
         this.titleView = (TextView) findViewById(R.id.OpenHabit_title);
-        this.titleView.setText(habitView.titleStringView());
-
+        this.titleView.setText(this.habitController.getTitle());
         changeAdapter();
-
-        //System.out.println(this.habit.getOccurrences().size());
-        //System.out.println(this.occurrences.size());
     }
-
-
 
     @Override
     protected void onResume() {
@@ -170,7 +169,7 @@ public class DetailHabitActivity extends AppCompatActivity {
         doneButton2.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        habit.addOccurrences(occurrences);
+                        habitController.addOccurrence(occurrences);
                         saveInFile();
                         finish();
 
@@ -182,11 +181,12 @@ public class DetailHabitActivity extends AppCompatActivity {
         habitListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (habit.getHistoryCount() > 0) {
-                            habit.removeHistory(position);
-                            System.out.print(habit.getHistory().size());
-                            habitView = new HabitView(habit);
-                            habitList.replaceHabit(habit, index);
+                        if (Integer.valueOf(habitController.getHistoryCount()) > 0) {
+
+                            habitController.removeHistory(position);
+
+                            Habit habit = habitController.getThis();
+                            habitListController.replaceHabit(habit, index);
 
                             changeAdapter();
                             saveInFile();
@@ -198,7 +198,7 @@ public class DetailHabitActivity extends AppCompatActivity {
 
     // Changing checkBox state based on the saved checkbox.
     private void toogleCheckbox() {
-        ArrayList<String> days = this.habit.getOccurrences();
+        ArrayList<String> days = this.habitController.getOccurrences();
         int range = days.size();
         for (int i=0; i<range;i++) {
             String day = days.get(i);
@@ -237,7 +237,7 @@ public class DetailHabitActivity extends AppCompatActivity {
     }
 
     private void changeAdapter() {
-        ArrayList<String> dates = habitView.datesStringView();
+        ArrayList<String> dates = this.habitController.getHistory();
 
         this.adapter = new ArrayAdapter<String>(this, R.layout.list_item, dates);
         ListView listView = (ListView) findViewById(R.id.DetailsPage_list);
@@ -251,7 +251,7 @@ public class DetailHabitActivity extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(this.habitList.getHabitList(), out);
+            gson.toJson(this.habitListController.getHabitList(), out);
             out.flush();
 
             fos.close();
@@ -279,7 +279,7 @@ public class DetailHabitActivity extends AppCompatActivity {
 
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file. */
-            this.habitList = new HabitList();
+            this.habitListController = new HabitListController();
         }
     }
 

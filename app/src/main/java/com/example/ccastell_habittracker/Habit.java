@@ -26,47 +26,48 @@ public class Habit implements Serializable{
     }
 
 
-    public String getTitle() {
+    public String accessTitle() {
         return this.title;
     }
 
-    public String getText() {
+    public String accessText() {
         return this.text;
     }
 
-    public void addHistory(Date date) {
+    public void incrementHistory(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String dateFormatted = dateFormat.format(date);
-        System.out.println(dateFormatted);
+        System.out.println("Habit " + dateFormatted);
+
         this.history.add(dateFormatted);
     }
 
-    public void addHistoryCount() {
+    public void incrementHistoryCount() {
         this.count ++;
     }
 
-    public int getHistoryCount() {
+    public int accessHistoryCount() {
         return this.count;
     }
 
-    public ArrayList<String> getHistory() {
+    public ArrayList<String> accessHistory() {
         return this.history;
     }
 
-    public void  removeHistory(int index) {
+    public void  decrementHistory(int index) {
         this.history.remove(index);
         this.count --;
     }
 
-    public String getDateCreation() {
+    public String accessDateCreation() {
         return this.history.get(0);
     }
 
-    public void addOccurrences(ArrayList<String> occurrences) {
+    public void incrementOccurrences(ArrayList<String> occurrences) {
         this.occurrences = occurrences;
     }
 
-    public ArrayList<String> getOccurrences() {
+    public ArrayList<String> accessOccurrences() {
         return this.occurrences;
     }
 

@@ -11,25 +11,31 @@ public class HabitList {
     public HabitList() {
        this.habitList = new ArrayList<Habit>();
     }
-    public HabitList(ArrayList<Habit> memory) {
-        this.habitList = memory;
+
+    public HabitList(ArrayList<Habit> habitList) {
+        this.habitList = habitList;
     }
-    public ArrayList<Habit> getHabitList(){
+
+    public ArrayList<Habit> accessHabitList(){
         return this.habitList;
     }
-    public void addHabit(Habit habit) {
+
+    public void incrementHabit(Habit habit) {
         this.habitList.add(habit);
     }
-    public Habit getHabit(int index) {
+    public Habit accessHabit(int index) {
         return this.habitList.get(index);
     }
-    public void removeHabit(Habit habit){
+    public void decrementHabit(Habit habit){
         this.habitList.remove(habit);
     }
-    public void replaceHabit(Habit habit, int index) {
+    public void modifyHabitList(Habit habit, int index) {
         this.habitList.set(index,habit);
     }
-    public int countHabit() {
+
+    public int accessHabitSize() {
         return this.habitList.size();
     }
+
+
 }

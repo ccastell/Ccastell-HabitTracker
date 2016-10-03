@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,24 +35,24 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     public SimpleAdapter adapter;
-    //private ListView listView;
     private ArrayList<Habit> jsonList;
-    private Habit habit;
     private int range;
     private Date currentDate;
-    private HabitView habitView;
-    private HabitList habitList;
-
+    private HabitListController habitListController;
     private static final String FILENAME = "file.sav";
-    //private String[] titleList, dateLits;
     private List<Map<String,String>> Data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Calendar today = Calendar.getInstance();
+        //today.set(Calendar.HOUR_OF_DAY,0);
         this.currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        String dateFormatted = dateFormat.format(currentDate);
+        System.out.println("Main Activity " + dateFormatted);
+
     }
 
     //
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         Intent intent= new Intent(MainActivity.this, AddHabitActivity.class);
-                        System.out.println("***** "+currentDate);
                         intent.putExtra("Date",currentDate.getTime());
                         startActivityForResult(intent,0);
                     }
@@ -103,15 +103,20 @@ public class MainActivity extends AppCompatActivity {
     private void changeAdapter() {
         ListView listView = (ListView) findViewById(R.id.Main_habit_list);
 
-        this.habitList = new HabitList(this.jsonList);
-        this.range = habitList.countHabit();
+        //this.habitListController = new HabitListController(this.jsonList);
+        //this.habitListController.makeHabitList(this.jsonList);
+
+
+        this.range = this.habitListController.getHabitListCount();
         this.Data = new  ArrayList<Map<String,String>>();
         for (int i=0; i<range; i++) {
-            this.habit = this.habitList.getHabit(i);
-            this.habitView = new HabitView(this.habit);
+
+            Habit habit = this.habitListController.getHabit(i);
+            HabitController habitController = new HabitController(habit);
+
             Map<String,String> datum = new HashMap<String,String>(2);
-            datum.put("title",this.habitView.titleStringView());
-            datum.put("date",this.habitView.dateStringView());
+            datum.put("title",habitController.getTitle());
+            datum.put("date",habitController.getDate());
             this.Data.add(datum);
         }
 
@@ -131,13 +136,15 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
                 String day = daysFormat.format(currentDate);
                 String date = dateFormat.format(currentDate);
-                System.out.println("---"+date);
-                habit = habitList.getHabit(position);
-                if (habit.getOccurrences().contains(day)){
-                    if (habit.getHistory().contains(date) && habit.getHistoryCount() == 0) {
+
+                Habit habit = habitListController.getHabit(position);
+                HabitController habitController = new HabitController(habit);
+
+                if (habitController.getOccurrences().contains(day)){
+                    if (habitController.getHistory().contains(date) && Integer.valueOf(habitController.getHistoryCount()) == 0) {
                         text.setTextColor(Color.RED);
                     }
-                    if (!habit.getHistory().contains(date)) {
+                    if (!habitController.getHistory().contains(date)) {
                         text.setTextColor(Color.RED);
                     }
                 }
@@ -148,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 return  row;
             }
         };
-
-        //this.adapter = new ArrayAdapter<Habit>(this, R.layout.list_item,this.habitList.getHabitList());
         listView.setAdapter(this.adapter);
     }
 
@@ -163,10 +168,12 @@ public class MainActivity extends AppCompatActivity {
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
             this.jsonList = gson.fromJson(in,listType);
+            this.habitListController = new HabitListController(this.jsonList);
+            //System.out.println(this.jsonList.size());
 
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file. */
-            habitList = new HabitList();
+            this.habitListController = new HabitListController();
         }
     }
 }

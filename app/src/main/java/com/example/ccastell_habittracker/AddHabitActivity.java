@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class AddHabitActivity extends AppCompatActivity {
-    private Habit newHabit;
+    //private Habit newHabit;
     private EditText titleText;
     private EditText bodyText;
     private ArrayList<String> occurrences = new ArrayList<String>();;
     private ArrayList<Habit> jsonList;
-    private HabitList habitList;
+    //private HabitList habitList;
+    private HabitListController habitListController;
     private Date currentDate;
     private static final String FILENAME = "file.sav";
 
@@ -42,10 +43,7 @@ public class AddHabitActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadFromFile();
-       // String date = getIntent().getExtras().getString("date");
-
         this.currentDate = new Date(getIntent().getLongExtra("Date",-1));
-        System.out.println("+++++ "+currentDate);
     }
 
 
@@ -53,7 +51,11 @@ public class AddHabitActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        this.habitList = new HabitList(this.jsonList);
+        //System.out.println("----- "+this.jsonList.size());
+        //this.habitListController = new HabitListController(this.jsonList);
+        //this.habitListController.makeHabitList(this.jsonList);
+
+
         this.titleText = (EditText) findViewById(R.id.AddPage_title);
         this.bodyText = (EditText) findViewById(R.id.AddPage_description);
         //this.occurrences = new ArrayList<String>();
@@ -66,11 +68,11 @@ public class AddHabitActivity extends AppCompatActivity {
                         String title = titleText.getText().toString();
                         String body = bodyText.getText().toString();
 
-                        newHabit = new Habit(title,body);
-                        newHabit.addHistory(currentDate);
-                        newHabit.addOccurrences(occurrences);
-
-                        habitList.addHabit(newHabit);
+                        HabitController habitController = new HabitController(title,body);
+                        habitController.addHistory(currentDate);
+                        habitController.addOccurrence(occurrences);
+                        Habit habit = habitController.getThis();
+                        habitListController.addHabit(habit);
 
                         saveInFile();
                         setResult(RESULT_OK);
@@ -182,7 +184,7 @@ public class AddHabitActivity extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(this.habitList.getHabitList(), out);
+            gson.toJson(this.habitListController.getHabitList(), out);
             out.flush();
 
             fos.close();
@@ -206,11 +208,13 @@ public class AddHabitActivity extends AppCompatActivity {
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
             this.jsonList = gson.fromJson(in,listType);
-            this.habitList = new HabitList(jsonList);
+            this.habitListController = new HabitListController(this.jsonList);
+            //this.habitListController.makeHabitList(this.jsonList);
 
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file. */
-            this.habitList = new HabitList();
+            this.habitListController = new HabitListController();
+
         }
     }
 }
