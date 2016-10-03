@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/padding"
+    android:paddingLeft="@dimen/padding"
+    android:paddingRight="@dimen/padding"
+    android:paddingTop="@dimen/padding"
+    tools:context="com.example.ccastell_habittracker.MainActivity"
+    android:background="#b6affe">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Add"
+        android:id="@+id/Main_add_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        android:background="#303F9F"
+        android:textColor="#ffffff" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Main_habit_list"
+        android:layout_alignParentStart="true"
+        android:headerDividersEnabled="false"
+        android:background="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/Main_add_button"
+        android:layout_marginBottom="15dp" >
+    </ListView>
+</RelativeLayout>

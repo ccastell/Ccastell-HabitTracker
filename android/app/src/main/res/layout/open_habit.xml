@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/padding"
+    android:paddingLeft="@dimen/padding"
+    android:paddingRight="@dimen/padding"
+    android:paddingTop="@dimen/padding"
+    android:background="#b6affe">
+
+    <TextView
+        android:id="@+id/OpenHabit_title"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Title"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/OpenHabit_done_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/OpenHabit_done_button"
+        android:textSize="30dp"
+        android:textColor="#000000"
+        android:background="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="left|center" />
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Done"
+        android:id="@+id/OpenHabit_done_button"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:background="#303F9F"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OpenHabit_description"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#ffffff"
+        android:layout_below="@+id/OpenHabit_mark_complete_button"
+        android:layout_marginTop="15dp"
+        android:layout_above="@+id/OpenHabit_bottom_frame"
+        android:layout_marginBottom="15dp"
+        android:padding="15dp"
+        android:textSize="25dp"
+        android:singleLine="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Complete"
+        android:id="@+id/OpenHabit_mark_complete_button"
+        android:textSize="25dp"
+        android:background="#303F9F"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/OpenHabit_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_toStartOf="@+id/OpenHabit_Counter"
+        android:gravity="left|center"
+        android:paddingLeft="15dp" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/OpenHabit_bottom_frame"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:weightSum="1">
+
+        <Button
+
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:text="Details"
+            android:id="@+id/OpenHabit_more_button"
+            android:layout_weight="0.5"
+            android:background="#3241a0"
+            android:textColor="#ffffff"
+            android:layout_marginRight="7.5dp" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:text="Delete"
+            android:id="@+id/OpenHabit_delete_button"
+            android:layout_weight="0.5"
+            android:textColor="#ffffff"
+            android:background="#ff0303"
+            android:layout_marginLeft="7.5dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/OpenHabit_Counter"
+        android:layout_alignTop="@+id/OpenHabit_mark_complete_button"
+        android:layout_alignBottom="@+id/OpenHabit_mark_complete_button"
+        android:layout_alignStart="@+id/OpenHabit_done_button"
+        android:layout_alignParentEnd="true"
+        android:background="#303F9F"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:textSize="25dp" />
+
+
+</RelativeLayout>

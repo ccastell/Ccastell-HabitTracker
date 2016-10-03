@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/padding"
+    android:paddingLeft="@dimen/padding"
+    android:paddingRight="@dimen/padding"
+    android:paddingTop="@dimen/padding"
+    android:background="#b6affe">
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Done"
+        android:id="@+id/DetailsPage_done_button"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:background="#303F9F"
+        android:textColor="#ffffff" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_above="@+id/DetailsPage_tableRow2"
+        android:id="@+id/DetailsPage_tableRow3"
+        android:background="#ffffff">
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_monday"
+            android:text="Monday"
+            android:checked="false"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_tuesday"
+            android:checked="false"
+            android:text="Tuesday"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_wednesday"
+            android:text="Wednesday"
+            android:checked="false"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_above="@+id/DetailsPage_tableRow1"
+        android:id="@+id/DetailsPage_tableRow2"
+        android:background="#ffffff">
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_thursday"
+            android:text="Thursday"
+            android:checked="false"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_friday"
+            android:text="Friday"
+            android:checked="false"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_saturday"
+            android:text="Saturday"
+            android:checked="false"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:id="@+id/DetailsPage_tableRow1"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"></FrameLayout>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/DetailsPage_sunday"
+            android:checked="false"
+            android:text="Sunday"
+            android:onClick="DetailsPage_onCheckboxClicked"/>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"></FrameLayout>
+
+    </TableRow>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DetailsPage_list"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/DetailsPage_tableRow3"
+        android:background="#ffffff"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/DetailsPage_done_button"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:id="@+id/OpenHabit_title"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Title"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/DetailsPage_done_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/DetailsPage_done_button"
+        android:textSize="30dp"
+        android:textColor="#000000"
+        android:background="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="left|center" />
+
+
+</RelativeLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/padding"
+    android:paddingLeft="@dimen/padding"
+    android:paddingRight="@dimen/padding"
+    android:paddingTop="@dimen/padding"
+    android:background="#b6affe">
+
+    <EditText android:id="@+id/AddPage_title"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Title"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/AddPage_done_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/AddPage_done_button"
+        android:textSize="30dp"
+        android:textColor="#000000"
+        android:background="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Done"
+        android:id="@+id/AddPage_done_button"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:background="#303F9F"
+        android:textColor="#ffffff" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/AddPage_description"
+        android:layout_below="@+id/AddPage_title"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#ffffff"
+        android:layout_marginTop="15dp"
+        android:hint="Description"
+        android:gravity="top|left"
+        android:padding="15dp"
+        android:textSize="20dp"
+        android:layout_above="@+id/AddPage_tableRow3"
+        android:layout_marginBottom="15dp" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_above="@+id/AddPage_tableRow2"
+        android:id="@+id/AddPage_tableRow3"
+        android:background="#ffffff">
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_monday"
+            android:text="Monday"
+            android:checked="false"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_tuesday"
+            android:checked="false"
+            android:text="Tuesday"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_wednesday"
+            android:text="Wednesday"
+            android:checked="false"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_above="@+id/AddPage_tableRow1"
+        android:id="@+id/AddPage_tableRow2"
+        android:background="#ffffff">
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_thursday"
+            android:text="Thursday"
+            android:checked="false"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_friday"
+            android:text="Friday"
+            android:checked="false"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_saturday"
+            android:text="Saturday"
+            android:checked="false"
+            android:onClick="AddPage_onCheckboxClicked"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:id="@+id/AddPage_tableRow1"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"></FrameLayout>
+
+        <CheckBox
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/AddPage_sunday"
+            android:checked="false"
+            android:text="Sunday"
+            android:onClick="AddPage_onCheckboxClicked"/>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"></FrameLayout>
+
+    </TableRow>
+
+
+</RelativeLayout>
