@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    public SimpleAdapter adapter;
+    private SimpleAdapter adapter;
     private ArrayList<Habit> jsonList;
     private int range;
     private Date currentDate;
