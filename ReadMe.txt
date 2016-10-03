@@ -6,3 +6,5 @@ Dependencies:
 
 This is my youtube video.
 	https://youtu.be/jb0-3QYsn0U
+
+I had trouble merging my last commit with my master
